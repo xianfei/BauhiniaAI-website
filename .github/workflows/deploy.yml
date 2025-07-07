@@ -29,14 +29,38 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            
+      - name: Clear npm cache (if needed)
+        run: npm cache clean --force
+        
+      - name: Remove package-lock and node_modules (workaround for rollup issue)
+        run: |
+          rm -rf package-lock.json
+          rm -rf node_modules
           
       - name: Install dependencies
-        run: npm i
+        run: |
+          npm install --no-optional --verbose
+          npm list --depth=0
         
-      - name: Build
-        run: npm run build
+      - name: Build with error handling
+        run: |
+          echo "Starting build process..."
+          npm run build
+          echo "Build completed successfully!"
+          ls -la dist/
+        env:
+          NODE_ENV: production
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
