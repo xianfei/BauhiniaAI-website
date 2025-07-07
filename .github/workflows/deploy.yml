@@ -21,7 +21,7 @@ concurrency:
 jobs:
   # Build job
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,38 +29,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+          cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
           
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-            
-      - name: Clear npm cache (if needed)
+      - name: Clear npm cache
         run: npm cache clean --force
         
-      - name: Remove package-lock and node_modules (workaround for rollup issue)
+      - name: Remove package-lock and node_modules
         run: |
           rm -rf package-lock.json
           rm -rf node_modules
           
       - name: Install dependencies
-        run: |
-          npm install --no-optional --verbose
-          npm list --depth=0
+        run: npm install
         
-      - name: Build with error handling
-        run: |
-          echo "Starting build process..."
-          npm run build
-          echo "Build completed successfully!"
-          ls -la dist/
-        env:
-          NODE_ENV: production
+      - name: Build
+        run: npm run build
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
