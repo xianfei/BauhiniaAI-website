@@ -24,7 +24,7 @@
       <div class="hero-content">
         <h1 class="hero-title" :style="{fontFamily: myfonts.family}">
           Reshape the Future<br>
-          of AI Agents
+          with AI Agents
         </h1>
         <div class="hero-subtitle">
           <p>Research-driven.</p>
@@ -40,19 +40,7 @@
     <!-- Mission Section -->
     <section class="mission-section">
       <div class="container">
-        <p class="mission-text">
-          Our mission is to build powerful and practical AI agents capable of solving real-world tasks.
-        </p>
-        <p class="mission-text">
-          Originating from the Digital Finance Lab at HKUST, our team blends academic depth with real-world engineering 
-          expertise to push the boundaries of autonomous intelligence.
-        </p>
-        <p class="mission-text">
-          We believe that agents should not only reason, plan, and learn - but also adapt to social environments, collaborate with humans, and operate in open-ended systems.
-        </p>
-        <p class="mission-text">
-          As we continue to build, we are laying the groundwork for a broader ecosystem of agent-native applications spanning communication, simulation, and real-world decision-making.
-        </p>
+        <vue-markdown-it :source="markdown" class="mission-text" />
       </div>
     </section>
 
@@ -131,6 +119,16 @@ export default {
       isScrolled: false,
       scrollY: 0,
       myfonts: css,
+      markdown: "",
+      markdown_: `Our mission is to build powerful and practical **AI agents** capable of **solving real-world tasks**.
+
+Originating from the Digital Finance Lab at HKUST, our team **blends academic depth with real-world engineering expertise** to push the boundaries of autonomous intelligence.
+
+We believe that agents should not only reason, plan, and learn - but also adapt to social environments, collaborate with humans, and operate in open-ended systems.
+
+As we continue to build, we are **laying the groundwork for a broader ecosystem of agent-native applications** spanning communication, simulation, and real-world decision-making.
+
+`.split(' '),
       projects: [
         {
           id: 1,
@@ -180,7 +178,50 @@ export default {
     }
   },
   mounted() {
+    const app = this
     window.addEventListener('scroll', this.handleScroll);
+    document.addEventListener('DOMContentLoaded', function () {
+      // 获取所有需要延迟自动播放的视频元素
+      const videos = document.querySelectorAll('.mission-section');
+
+      // 检查浏览器是否支持 Intersection Observer
+      if ('IntersectionObserver' in window) {
+        // 创建 Intersection Observer 实例
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const video = entry.target;
+              // 尝试播放视频
+              if(!app.markdown){
+                const foo = () => setTimeout(()=>{
+                  app.markdown += app.markdown_[0] + ' '
+                  app.markdown_ = app.markdown_.slice(1)
+                  if(app.markdown_.length>0) foo()
+                },30)
+                foo()
+              }
+
+              // 视频已处理，停止观察
+              observer.unobserve(video);
+            }
+          });
+        }, {
+          threshold: 0.5 // 当视频70%可见时触发
+        });
+
+
+        // 为每个视频设置观察
+        videos.forEach(video => {
+          observer.observe(video);
+          // 预加载视频元数据以减少播放延迟
+        });
+      } else {
+        videos.forEach(video => {
+          // 简单地将所有视频设置为自动播放（可能不太理想）
+          app.markdown = app.markdown_
+        });
+      }
+    })
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -347,7 +388,7 @@ line-height: 1;
   padding: 0 50px;
 }
 
-.mission-text {
+.mission-text p {
   font-size: 1.1rem;
   color: #666;
   margin: 0 20px;
@@ -527,7 +568,7 @@ line-height: 1;
 @media (max-width: 768px) {
   .header {
     padding: 1rem;
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 1rem;
   }
 
