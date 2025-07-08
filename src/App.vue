@@ -31,7 +31,7 @@
           <p>Product-grounded.</p>
           <p>Agent-first.</p>
         </div>
-        <button class="cta-button">Try Aivilization</button>
+        <button class="cta-button" @click="openaiv">Try Aivilization</button>
       </div>
     </section>
 
@@ -94,7 +94,7 @@
             <h4>Projects</h4>
             <ul>
               <li v-for="project in projects" :key="project.id">
-                <a href="#">{{ project.title }}</a>
+                <a :href="project.link" target="_blank">{{ project.title }}</a>
               </li>
             </ul>
           </div>
@@ -137,7 +137,7 @@ As we continue to build, we are **laying the groundwork for a broader ecosystem 
             'Simulate Societies.',
             'Accelerate Research.'
           ],
-          description: 'From open-world game ANPCs to social science and economic modeling, Aivilization empowers large-scale, dynamic simulations that feel alive and adaptive.',
+          description: 'From open-world game AINPCs to social science and economic modeling, Aivilization empowers large-scale, dynamic simulations that feel alive and adaptive.',
           image: '/path/to/aivilization-image.png',
           link:'https://www.aivilization.ai/'
         },
@@ -147,7 +147,7 @@ As we continue to build, we are **laying the groundwork for a broader ecosystem 
           features: [
             'Smarter Conversations, Instantly.'
           ],
-          description: 'Wetips attaches to your favorite chatapps, offering AI-generated reply suggestions, tone control, and document-based Q&A-all with privacy.',
+          description: 'Wetips attaches to your favorite chatapps, offering AI-generated reply suggestions, tone control, and document-based Q&A - all with privacy.',
           image: '/path/to/wetips-image.png',
           link:'https://wetips.ai/?source=bauhiniaai'
         }
@@ -165,7 +165,7 @@ As we continue to build, we are **laying the groundwork for a broader ecosystem 
       const rotation = 110 + (scrollProgress * 160);
       
       // 初始透明度0.8，随滚动降低到0
-      const opacity = Math.max(0.8 - (scrollProgress * 1), 0);
+      const opacity = Math.max(0.8 - (scrollProgress * 1.2), 0);
       
       // 初始缩放0.8，可以稍微调整
       const scale = 0.7 - (scrollProgress * 0.1);
@@ -227,6 +227,12 @@ As we continue to build, we are **laying the groundwork for a broader ecosystem 
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+    openaiv(){
+      window.open('https://www.aivilization.ai/', '_blank');
+    },
+    openwet(){
+      window.open('https://www.wetips.ai/', '_blank');
+    },
     handleScroll() {
       this.scrollY = window.scrollY;
       // 当滚动超过第一屏（100vh）时显示header背景
@@ -261,7 +267,7 @@ html{
 }
 
 .homepage {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
 }
 
@@ -389,8 +395,9 @@ line-height: 1;
 }
 
 .mission-text p {
+  font-family: "IBM Plex Sans", sans-serif;
   font-size: 1.1rem;
-  color: #666;
+  color: #444;
   margin: 0 20px;
   margin-bottom: 1.5rem;
   max-width: 800px;
@@ -516,7 +523,7 @@ line-height: 1;
   color: white;
   padding: 3rem 0 50px;
   position: absolute;
-  left: 0;
+  /* left: 0; */
   width: 100vw;
   height: 300px;
 }
@@ -582,6 +589,10 @@ line-height: 1;
     width: 500px;
     left: 30vw;
     
+  }
+
+  .footer{
+    height: 500px;
   }
 
   .hero-content{
