@@ -62,14 +62,12 @@
                   {{ feature }}
                 </li>
               </ul>
-              <p class="project-description">
-                {{ project.description }}
-              </p>
+              <p class="project-description" v-html="project.description"></p>
               <button class="learn-more-btn" @click="open(project.link)">Learn More</button>
             </div>
             <div class="project-image">
               <!-- <img class="img" :src="project.image" :alt="project.title" /> -->
-               <div class="img" >
+               <div class="img" :style="(project.id==1 && window.innerWidth>768)?{height: '500px'}:{}">
                 <div class="iframe-wrapper">
 
                   <iframe :src="project.link" style=""></iframe>
@@ -119,6 +117,7 @@ export default {
       isScrolled: false,
       scrollY: 0,
       myfonts: css,
+      window,
       markdown: "",
       markdown_: `Our mission is to build powerful and practical **AI agents** capable of **solving real-world tasks**.
 
@@ -133,11 +132,16 @@ As we continue to build, we are **laying the groundwork for a broader ecosystem 
         {
           id: 1,
           title: 'Aivilization',
-          features: [
-            'Simulate Societies.',
-            'Accelerate Research.'
-          ],
-          description: 'From open-world game AINPCs to social science and economic modeling, Aivilization empowers large-scale, dynamic simulations that feel alive and adaptive.',
+          features: [],
+          description: `<p>The world’s first large-scale <strong>AI education sandbox game</strong>—and the world’s <strong>largest multi-agent social-simulation sandbox</strong>. In its first week online, Aivilization attracted <strong>30,000+</strong> sign-ups, with <strong>100,000+</strong> players participating worldwide. It trended on <strong>Xiaohongshu (RED)</strong> with topic views surpassing <strong>1 million</strong> and <strong>10,000+</strong> related posts.</p>
+<p>Momentum continues across platforms: WeChat Official Account articles have amassed <strong>~300,000</strong> reads, while related videos on Bilibili have reached <strong>270,000</strong> views. Coverage from mainstream and tech media—including <strong>Sina Finance</strong>, <strong>Tencent News</strong>, and <strong>YouYanShe / Huxiu</strong>—has amplified cross-platform visibility.</p>
+<p><h4>Media quotes</h4></p>
+<ul>
+<li><strong>YouYanShe:</strong> “After launching for free, it went viral—this is an AI concept game that’s been ‘brought to life.’”</li>
+<li><strong>Tencent News:</strong> “How a group of college students built the AI game taking the internet by storm.” / “With greater scale and openness and high-density human–AI interaction, agents are no longer trapped in loops of repetitive behavior.”</li>
+<li><strong>Sina Finance:</strong> “A rapid breakout… larger in scale and openness, designed for broad playability.”</li>
+
+</ul>`,
           image: '/path/to/aivilization-image.png',
           link:'https://www.aivilization.ai/'
         },
@@ -446,18 +450,23 @@ line-height: 1;
   font-weight: 400;
 }
 
-.project-features {
+.project-card ul {
   list-style: none;
   margin-bottom: 1.5rem;
 }
 
-.project-features li {
+.project-card li {
   color: #333;
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
 
-.project-features li::before {
+.project-card h4{
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-card li::before {
   content: '•';
   color: #0066cc;
   margin-right: 0.5rem;
@@ -465,7 +474,7 @@ line-height: 1;
 }
 
 .project-description {
-  color: #666;
+  color: #333;
   line-height: 1.6;
   margin-bottom: 2rem;
 }
